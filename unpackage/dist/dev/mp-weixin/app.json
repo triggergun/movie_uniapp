@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/main/main"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "GUN系统",
+    "navigationBarBackgroundColor": "#3474FF",
+    "backgroundColor": "#EEEEF4"
+  },
+  "usingComponents": {}
+}
