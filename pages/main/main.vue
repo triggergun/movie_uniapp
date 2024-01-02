@@ -137,7 +137,7 @@ export default {
 .header .icon {
 	width: 44rpx;
 	height: 44rpx;
-	background-image: url('@/static/images/main/search_icon.png');
+	background-image: url('https://movie-info-1320192491.cos.ap-guangzhou.myqcloud.com/mian_page%2Fsearch_icon.png');
 	background-size: 100%;
 	background-position: center;
 	background-repeat: no-repeat;

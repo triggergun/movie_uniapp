@@ -9259,9 +9259,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.getMovieData = getMovieData;var _config = _interopRequireDefault(__webpack_require__(/*! ../../static/js/conf/config */ 16));
 var _request = __webpack_require__(/*! ../../static/js/utils/request */ 17);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-//显示首页商家列表
+// show movie list
 function getMovieData(data) {
-  return (0, _request.request)(_config.default.baseMovieApi + "/movie/page/list", "get", data);
+  return (0, _request.request)(_config.default.onLineMovieApi + "/movie/page/list", "get", data);
 }
 
 /***/ }),
@@ -9276,7 +9276,8 @@ function getMovieData(data) {
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var baseMovieApi = "http://43.136.124.89:8080";
 var onLineMovieApi = "http://43.136.124.89:8080";var _default =
 {
-  baseMovieApi: baseMovieApi };exports.default = _default;
+  baseMovieApi: baseMovieApi,
+  onLineMovieApi: onLineMovieApi };exports.default = _default;
 
 /***/ }),
 /* 17 */
