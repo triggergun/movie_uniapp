@@ -1,13 +1,19 @@
 {
   "description": "项目配置文件。",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "setting": {
-    "urlCheck": false,
+    "urlCheck": true,
     "es6": true,
     "minified": true,
-    "postcss": true
+    "postcss": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
   },
   "compileType": "miniprogram",
   "libVersion": "",
@@ -27,15 +33,12 @@
       "list": []
     },
     "miniprogram": {
-      "current": 3,
-      "list": [
-        {
-          "name": "",
-          "query": "",
-          "id": 0,
-          "pathName": "pages/checkin/checkin"
-        }
-      ]
+      "current": -1,
+      "list": []
     }
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }

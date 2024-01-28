@@ -2,8 +2,8 @@
 	<view class="page">
 		<view class="status_bar"></view>
 		<view class="header">
-			
-			<view :class="{ 'search-header': true, ipx: false }">
+			<!--  点击时设置为 true -->
+			<view :class="{ 'search-header': true, ipx: false }" @click="isShowSearchComponents = true">
 				<view class="search-wrap">
 					<view class="icon"></view>
 					<view class="text">请输入影视信息</view>
@@ -15,41 +15,43 @@
 				<view class="shop-wrap">
 					<view class="image"><image :src="item.imageUrl"></image></view>
 					<view class="shop-info">
-						<view class="shop-name">{{ item.movieName }}</view>
-						<view class="distance">{{ item.number }}</view>
-						<view class="address">{{ item.updataTime }}</view>
-						<view class="get-time">获取时间：{{ formatDateTime(item.getTime) }}</view>
-						<view class="source">{{ item.source }}</view>
+						<view class="shop-name">{{item.movieName}}</view>
+						<view class="distance">{{item.number}}</view>
+						<view class="address">{{item.updataTime}}</view>
+						<view class="get-time">获取时间{{item.getTime}}</view>
+						<view class="source">{{item.source}}</view>
 						<view class="pack-btn">详情</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		<Search :show="isShowSearchComponents" @close="isShowSearchComponents = false"></Search>
 	</view>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import Search from '../../components/search';
 
 export default {
 	data() {
-		return {};
+		return {
+			isShowSearchComponents: false
+		};
 	},
 
 	onLoad() {
 		//this.getMovie();
-		console.log('我是onLoad方法');
+		// console.log('我是onLoad方法');
 		this.maxPage = 0; //总页数
 		this.curPage = 1; //当前页码
 	},
 	onShow() {
-		console.log('我是onShow方法');
+		// console.log('我是onShow方法');
 		this.getMovie({
 			currentPage: 1,
 			pageSize: 20,
 			success: res => {
-				// 这个函数的参数，是请求成功后，的方法传递的。
-				console.log('结果是' + res.page.pages);
 				this.maxPage = res.page.pages;
 			}
 		});
@@ -76,8 +78,9 @@ export default {
 	},
 	computed: {
 		...mapState({
-			isIpx: state => state.system.isIpx,
-			movies: state => state.movie.movies
+			isIpx:state => state.system.isIpx,
+			movies:state => state.movie.movies,
+			isShowStatus:state => state.movie.isShowStatus
 		})
 	},
 	//下拉刷新
@@ -97,6 +100,17 @@ export default {
 			this.curPage++;
 			this.getMoviePage({ currentPage: this.curPage, pageSize: 20 });
 		}
+	},
+	//分享小程序
+	onShareAppMessage(res) {
+		return {
+			title: '木有木兮小程序',
+			path: '/pages/main/main'
+		};
+	},
+	// 组件
+	components: {
+		Search
 	}
 };
 </script>
@@ -121,7 +135,7 @@ export default {
 	height: 170rpx;
 	padding-left: 40rpx;
 	display: flex;
-	align-items: center;// 交叉轴
+	align-items: center; // 交叉轴
 }
 .header .search-header.ipx {
 	height: 210rpx;
@@ -237,4 +251,25 @@ export default {
 	font-weight: bold;
 	margin-top: 10rpx;
 }
+
+/*   lyp  */
+
+.show-loading view {
+	text-align: center;
+}
+.show-loading {
+	text-align: center;
+	width: 100%;
+	position: fixed;
+	top: 300rpx;
+}
+
+/* 行高 == 高垂直居中对齐 */
+/* .load-text{
+	width: 100%;
+	height: 100rpx;
+	text-align: center;
+	line-height: 100rpx;
+	background-color: #F0AD4E;
+} */
 </style>

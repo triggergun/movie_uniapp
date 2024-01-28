@@ -904,7 +904,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7331,7 +7331,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7352,14 +7352,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7445,7 +7445,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"uniapp-demo01","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -8035,14 +8035,16 @@ function normalizeComponent (
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));
 var _system = _interopRequireDefault(__webpack_require__(/*! ./system */ 13));
-var _movie = _interopRequireDefault(__webpack_require__(/*! ./movie */ 14));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _movie = _interopRequireDefault(__webpack_require__(/*! ./movie */ 14));
+var _search = _interopRequireDefault(__webpack_require__(/*! ./search */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 _vue.default.use(_vuex.default);
 
 var store = new _vuex.default.Store({
   modules: {
     system: _system.default,
-    movie: _movie.default } });var _default =
+    movie: _movie.default,
+    search: _search.default } });var _default =
 
 
 
@@ -9197,7 +9199,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   namespaced: true,
   state: {
-    movies: [] },
+    movies: [],
+    isShowStatus: false },
 
   mutations: (_mutations = {}, _defineProperty(_mutations,
 
@@ -9210,6 +9213,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   "SET_MOVIES_PAGE", function SET_MOVIES_PAGE(state, payload) {var _state$movies;
     (_state$movies = state.movies).push.apply(_state$movies, _toConsumableArray(payload.movies)); // 数组的方法
+  }), _defineProperty(_mutations,
+
+
+  "SET_IS_SHOW_STATUS", function SET_IS_SHOW_STATUS(state, payload) {
+    state.isShowStatus = payload.isShowStatus; // 数组的方法
   }), _mutations),
 
 
@@ -9220,15 +9228,19 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       // /api/movie的方法
       (0, _movie.getMovieData)(payload).then(function (res) {
         if (res.code == 0) {
+          console.log("首页1" + res.data.list);
           conText.commit("SET_MOVIES", {
             movies: res.data.list });
 
           if (payload.success) {
-            console.log("结果是" + res.data);
             payload.success(res.data);
           }
-        }
+          // 请求成功显示
+          conText.commit("SET_IS_SHOW_STATUS", {
+            isShowStatus: true // 获取数组
+          });
 
+        }
         // 执行结束
         if (payload.complete) {
           payload.complete();
@@ -9241,9 +9253,17 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     getMoviePage: function getMoviePage(conText, payload) {
       (0, _movie.getMovieData)(payload).then(function (res) {
         if (res.code == 0) {
+          console.log("首页" + res.data.list);
           conText.commit("SET_MOVIES_PAGE", {
             movies: res.data.list // 获取数组
           });
+
+          // 请求成功显示
+          conText.commit("SET_IS_SHOW_STATUS", {
+            isShowStatus: true // 获取数组
+          });
+
+          console.log("请求显示的状态是" + conText.state.isShowStatus);
         }
       });
     } } };exports.default = _default;
@@ -9261,7 +9281,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.getMovieDa
 var _request = __webpack_require__(/*! ../../static/js/utils/request */ 17);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 // show movie list
 function getMovieData(data) {
-  return (0, _request.request)(_config.default.onLineMovieApi + "/movie/page/list", "get", data);
+  return (0, _request.request)(_config.default.baseMovieApi + "/movie/page/list", "get", data);
 }
 
 /***/ }),
@@ -9273,11 +9293,10 @@ function getMovieData(data) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var baseMovieApi = "http://43.136.124.89:8080";
-var onLineMovieApi = "http://43.136.124.89:8080";var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var baseMovieApi = "https://tc03vd.top";
+var onLineMovieApi = "https://43.136.124.89:8080";var _default =
 {
-  baseMovieApi: baseMovieApi,
-  onLineMovieApi: onLineMovieApi };exports.default = _default;
+  baseMovieApi: baseMovieApi };exports.default = _default;
 
 /***/ }),
 /* 17 */
@@ -9308,6 +9327,108 @@ var onLineMovieApi = "http://43.136.124.89:8080";var _default =
   });
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 18 */
+/*!*********************************************************!*\
+  !*** D:/uniapp_demo/movie_uniapp/store/search/index.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _search = __webpack_require__(/*! ../../api/search */ 19);var _mutations;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}var _default =
+{
+  namespaced: true,
+  state: {
+    //搜索的关键词
+    keywords: "",
+    //历史搜索关键词
+    historyKeywords: uni.getStorageSync("historyKeywords") ? JSON.parse(uni.getStorageSync("historyKeywords")) : [],
+    searchMovies: [] //搜索菜品的数据
+  },
+  mutations: (_mutations = {}, _defineProperty(_mutations,
+
+  "SET_KEYWORDS", function SET_KEYWORDS(state, payload) {
+    state.keywords = payload.keywords;
+  }), _defineProperty(_mutations,
+
+  "SET_HISTORY_KEYWORDS", function SET_HISTORY_KEYWORDS(state, payload) {
+    if (payload.keywords) {
+      for (var i = 0; i < state.historyKeywords.length; i++) {
+        if (state.historyKeywords[i] == payload.keywords) {
+          state.historyKeywords.splice(i--, 1);
+          break;
+        }
+      }
+      state.historyKeywords.unshift(payload.keywords);
+      uni.setStorageSync("historyKeywords", JSON.stringify(state.historyKeywords));
+    }
+  }), _defineProperty(_mutations,
+
+  "CLEAR_HISTORY_KEYWORDS", function CLEAR_HISTORY_KEYWORDS(state) {
+    state.historyKeywords = [];
+    uni.removeStorageSync("historyKeywords");
+  }), _defineProperty(_mutations,
+
+  "SET_SEARCH_MOVIES", function SET_SEARCH_MOVIES(state, payload) {
+    state.searchMovies = payload.searchMovies;
+  }), _defineProperty(_mutations,
+
+
+  "SET_SEARCH_MOVIES_PAGE", function SET_SEARCH_MOVIES_PAGE(state, payload) {var _state$searchMovies;
+    (_state$searchMovies = state.searchMovies).push.apply(_state$searchMovies, _toConsumableArray(payload.searchMovies));
+  }), _mutations),
+
+  actions: {
+    //获取搜索的菜品
+    getSearchMovies: function getSearchMovies(conText, payload) {
+      (0, _search.getSearchMoviesData)(payload).then(function (res) {
+        if (res.code == 0) {
+          // 成功 表示
+          console.log("电影结果" + JSON.stringify(res.data));
+          conText.commit("SET_SEARCH_MOVIES", { searchMovies: res.data.list });
+          if (payload.success) {
+            // data属性
+            payload.success(res.data);
+          }
+        } else {
+          conText.commit("SET_SEARCH_MOVIES", { searchMovies: [] });
+        }
+      });
+    },
+    // 获取搜索菜品分页数据
+    getSearchMoviesPage: function getSearchMoviesPage(conText, payload) {
+      (0, _search.getSearchMoviesData)(payload).then(function (res) {
+        if (res.code == 0) {
+          // 响应的data属性
+          conText.commit("SET_SEARCH_MOVIES_PAGE", { searchMovies: res.data.list });
+        }
+      });
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 19 */
+/*!*******************************************************!*\
+  !*** D:/uniapp_demo/movie_uniapp/api/search/index.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.getSearchMoviesData = getSearchMoviesData;var _config = _interopRequireDefault(__webpack_require__(/*! ../../static/js/conf/config */ 16));
+var _request = __webpack_require__(/*! ../../static/js/utils/request */ 17);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+//获取热门搜索关键词
+// export function getHotKeywordsData(){
+//     return request(config.baseApi+"/v1/search/hotkeywords");
+// }
+
+//获取搜索影视的列表
+function getSearchMoviesData(data) {
+  return (0, _request.request)(_config.default.baseMovieApi + "/movie/keyword/list", "get", data);
+}
 
 /***/ })
 ]]);

@@ -7,7 +7,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(createApp, uni) {__webpack_require__(/*! uni-pages */ 4);var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+/* WEBPACK VAR INJECTION */(function(createApp) {__webpack_require__(/*! uni-pages */ 4);var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 5));
 var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 11));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -20,46 +20,7 @@ _App.default), {}, {
   store: _store.default }));
 
 createApp(app).$mount();
-
-
-var baseUrl = "http://localhost:8080/emos-wx-api";
-
-_vue.default.prototype.url = {
-  register: baseUrl + "/user/register",
-  login: baseUrl + "/user/login" };
-
-
-_vue.default.prototype.ajax = function (url, method, data, fun) {
-  uni.request({
-    "url": url,
-    "method": method,
-    "header": {
-      token: uni.getStorageSync("token") },
-
-    "data": data,
-    success: function success(resp) {
-      if (resp.statusCode == 401) {
-        uni.redirectTo({
-          url: "/pages/login/login.vue" });
-
-      } else if (resp.statusCode == 200 && resp.data.code == 200) {
-        var _data = resp.data;
-        if (_data.hasOwnProperty("token")) {
-          var token = _data.token;
-          console.log("获取的token保存到本地" + token);
-          uni.setStorageSync("token", token);
-        }
-        fun(resp);
-      } else {
-        uni.showToast({
-          icon: "none",
-          title: resp.data });
-
-      }
-    } });
-
-};
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createApp"], __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createApp"]))
 
 /***/ }),
 /* 1 */,
